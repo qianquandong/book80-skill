@@ -1,4 +1,4 @@
 interface:
   display_name: "Distill Book"
-  short_description: "Understand the vital 80% of a book in minutes"
-  default_prompt: "Use $distill-book to turn this book into a concise, source-grounded briefing."
+  short_description: "Understand books fast with source-linked HTML"
+  default_prompt: "Use $distill-book to create a concise, source-grounded briefing with an interactive HTML reader."
