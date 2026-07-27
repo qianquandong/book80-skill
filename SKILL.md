@@ -1,6 +1,6 @@
 ---
 name: distill-book
-description: Distill an EPUB, PDF, or other long-form book into a fast, source-grounded briefing that conveys the highest-value 80% of its ideas. Use when a user wants to understand a whole book quickly, get a book summary with citations, identify the most valuable chapters, extract arguments and evidence, decide whether the original is worth reading, or turn a book into an actionable 30-second, 3-minute, and 10-minute report.
+description: Distill an EPUB, PDF, or other long-form book into a fast, source-grounded briefing and an optional self-contained interactive HTML reader that conveys the highest-value 80% of its ideas. Use when a user wants to understand a whole book quickly, get a book summary with citations, jump from a summary back to the original text, identify the most valuable chapters, extract arguments and evidence, decide whether the original is worth reading, or turn a book into an actionable 30-second, 3-minute, and 10-minute report.
 ---
 
 # Distill Book
@@ -100,7 +100,25 @@ The report must support three reading speeds:
 - **3 minutes**: acquire the book's conceptual skeleton
 - **10 minutes**: understand the main claims, reasoning, evidence, and application
 
-### 6. Verify before delivery
+When a UTF-8 plain-text source is available, make source citations clickable by linking them to a line target ending in `#L<number>`, for example:
+
+```markdown
+[Chapter 2, source line 56](./book-source.html#L56)
+```
+
+### 6. Build the reader-friendly HTML
+
+For a deliverable intended for ordinary readers, generate a self-contained HTML file after the Markdown report:
+
+```bash
+python3 scripts/build_html_report.py REPORT.md SOURCE.txt \
+  --output BOOK-interactive-brief.html \
+  --title "Book title"
+```
+
+The HTML embeds the report and full source in one file. It provides a report table of contents, responsive mobile layout, dark mode, source search, and a source drawer that opens at cited `#L<number>` locations. Use `--lang zh` or `--lang en` to override automatic interface-language detection.
+
+### 7. Verify before delivery
 
 Check that:
 
@@ -130,11 +148,12 @@ When a digital edition has unstable page numbers, cite chapter and section or EP
 ## Output Defaults
 
 - Prefer concise prose and compact tables.
-- Use Markdown unless the user requests another format.
+- Use Markdown as the editable source of record.
+- Also generate the interactive HTML whenever a local source file and stable locators are available, unless the user explicitly requests Markdown only.
 - Include 5–10 core ideas, not one item per chapter.
 - Include no more than 10 short direct quotes unless requested.
 - End with the fastest useful next action: stop here, read selected chapters, or read the full book.
-- Save a `.md` report beside the source when the user asks for a file.
+- Save the `.md` report and self-contained `.html` reader beside the source when the user asks for files.
 
 ## Failure Handling
 
